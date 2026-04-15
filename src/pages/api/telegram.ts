@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getPhilharmonieEvents } from "@/lib/philharmonie-api";
 
 interface TelegramMessage {
   message_id: number;
@@ -184,7 +185,11 @@ async function handleCommand(command: string, chatId: number): Promise<void> {
     case "/start":
       await sendTelegramMessage(
         chatId,
-        "Willkommen! 🚂\n\nVerfügbare Befehle:\n/hbf - Züge in Berlin Hauptbahnhof (nächste 2h)"
+        "👋 Hallo Onur!\n\n" +
+        "<b>Bahnhöfe:</b>\n" +
+        "/hbf — Berlin Hauptbahnhof\n\n" +
+        "<b>Veranstaltungen:</b>\n" +
+        "/philharmonie — Berliner Philharmonie"
       );
       break;
       
@@ -193,10 +198,15 @@ async function handleCommand(command: string, chatId: number): Promise<void> {
       await sendTelegramMessage(chatId, departures);
       break;
       
+    case "/philharmonie":
+      const events = await getPhilharmonieEvents();
+      await sendTelegramMessage(chatId, events);
+      break;
+      
     default:
       await sendTelegramMessage(
         chatId,
-        "Unbekannter Befehl. Nutze /hbf für Berlin Hauptbahnhof."
+        "Unbekannter Befehl. Nutze /start für alle Commands."
       );
   }
 }
