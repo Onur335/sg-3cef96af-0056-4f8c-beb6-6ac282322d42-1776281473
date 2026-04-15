@@ -273,22 +273,29 @@ async function getBundesligaMatches(): Promise<string> {
       
       let stadium = "";
       let address = "";
+      let mapsQuery = "";
       
       if (match.team1.teamName === "Union Berlin") {
         stadium = "Stadion An der Alten Försterei";
         address = "An der Wuhlheide 263, 12555 Berlin (Köpenick)";
+        mapsQuery = "Stadion+An+der+Alten+Försterei+Berlin";
       } else if (match.team1.teamName === "Hertha BSC") {
         stadium = "Olympiastadion";
         address = "Olympischer Platz 3, 14053 Berlin (Charlottenburg)";
+        mapsQuery = "Olympiastadion+Berlin";
       } else {
         stadium = match.location.locationStadium;
         address = match.location.locationCity;
+        mapsQuery = encodeURIComponent(`${stadium} ${address}`);
       }
+      
+      const mapsLink = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
       
       message += `<b>${dateStr} | ${timeStr} - ${endTimeStr}</b>\n`;
       message += `${match.team1.teamName} vs ${match.team2.teamName}\n`;
       message += `📍 ${stadium}\n`;
-      message += `${address}\n\n`;
+      message += `${address}\n`;
+      message += `🗺️ <a href="${mapsLink}">Google Maps</a>\n\n`;
     });
     
     cachedFootball = { message, timestamp: Date.now() };
