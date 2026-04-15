@@ -1,6 +1,6 @@
 ---
 title: Dokkan Battle Gacha Simulator - Core System
-status: in_progress
+status: done
 priority: urgent
 type: feature
 tags: [gacha, dokkan, gaming]
@@ -33,13 +33,13 @@ Privates Dokkan Battle Gacha-System nur für persönlichen Gebrauch.
 
 ## Checklist
 
-- [ ] Core Data Structures: Character, Banner, User Profile types
-- [ ] Gacha Logic: Pull-Mechanik mit Rarity-Rates (SSR ~10%, Featured ~0.5%)
-- [ ] localStorage Service: Speichern/Laden von User-Daten
-- [ ] HomePage: Main Menu mit Navigation
-- [ ] Summon Page: Banner-Auswahl, Single/Multi Buttons, Pull-Animation
-- [ ] Character Box: Liste aller gezogenen Characters mit Filter/Sort
-- [ ] Admin Panel: Stones hinzufügen, Banner aktivieren/deaktivieren
-- [ ] 5 Banner-Daten: Featured/Unfeatured Character Lists (nur SR+)
-- [ ] Design System: Dokkan-inspirierte Farben, Fonts, UI-Komponenten
-- [ ] Mobile Optimization: Touch-friendly, responsive Layout
+- [x] Core Data Structures: Character, Banner, User Profile types
+- [x] Gacha Logic: Pull-Mechanik mit Rarity-Rates (SSR ~10%, Featured ~0.5%)
+- [x] localStorage Service: Speichern/Laden von User-Daten
+- [x] HomePage: Main Menu mit Navigation
+- [x] Summon Page: Banner-Auswahl, Single/Multi Buttons, Pull-Animation
+- [x] Character Box: Liste aller gezogenen Characters mit Filter/Sort
+- [x] Admin Panel: Stones hinzufügen, Banner aktivieren/deaktivieren
+- [x] 5 Banner-Daten: Featured/Unfeatured Character Lists (nur SR+)
+- [x] Design System: Dokkan-inspirierte Farben, Fonts, UI-Komponenten
+- [x] Mobile Optimization: Touch-friendly, responsive Layout
