@@ -202,28 +202,34 @@ async function getBundesligaMatches(): Promise<string> {
   }
 
   try {
-    const currentSeason = 2024;
-    const url = `https://api.openligadb.de/getmatchdata/bl1/${currentSeason}`;
+    const currentSeason = 2025;
     
-    console.log("Fetching Bundesliga data...");
-    const response = await fetch(url);
+    // Beide Ligen abfragen: Union in BL1, Hertha in BL2
+    const [bl1Response, bl2Response] = await Promise.all([
+      fetch(`https://api.openligadb.de/getmatchdata/bl1/${currentSeason}`),
+      fetch(`https://api.openligadb.de/getmatchdata/bl2/${currentSeason}`)
+    ]);
     
-    if (!response.ok) {
-      console.error("Bundesliga API error:", response.status);
+    if (!bl1Response.ok || !bl2Response.ok) {
+      console.error("Bundesliga API error");
       if (cachedFootball) {
         return cachedFootball.message + "\n\n<i>⚠️ API-Limit erreicht - zeige letzte Daten</i>";
       }
-      throw new Error(`API error: ${response.status}`);
+      throw new Error("API error");
     }
     
-    const matches = await response.json() as BundesligaMatch[];
+    const bl1Matches = await bl1Response.json() as BundesligaMatch[];
+    const bl2Matches = await bl2Response.json() as BundesligaMatch[];
+    
+    // Alle Matches kombinieren
+    const allMatches = [...bl1Matches, ...bl2Matches];
     
     const berlinTeams = ["Union Berlin", "Hertha BSC"];
     const today = new Date();
     const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     endOfMonth.setHours(23, 59, 59, 999);
     
-    const relevantMatches = matches.filter((match: BundesligaMatch) => {
+    const relevantMatches = allMatches.filter((match: BundesligaMatch) => {
       const matchDate = new Date(match.matchDateTime);
       const hasBerlinTeam = 
         berlinTeams.includes(match.team1.teamName) || 
@@ -231,6 +237,11 @@ async function getBundesligaMatches(): Promise<string> {
       const isThisMonth = matchDate >= today && matchDate <= endOfMonth;
       return hasBerlinTeam && isThisMonth;
     });
+    
+    // Nach Datum sortieren
+    relevantMatches.sort((a, b) => 
+      new Date(a.matchDateTime).getTime() - new Date(b.matchDateTime).getTime()
+    );
     
     if (relevantMatches.length === 0) {
       const monthName = today.toLocaleDateString("de-DE", { month: "long" });
