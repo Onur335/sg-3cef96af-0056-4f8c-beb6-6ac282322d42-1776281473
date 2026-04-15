@@ -40,8 +40,17 @@ interface DBDeparture {
   };
 }
 
+interface CachedData {
+  message: string;
+  timestamp: number;
+}
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DB_API_BASE = "https://v6.db.transport.rest";
+const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 Minuten Cache
+
+// In-Memory Cache (wird zwischen Requests geteilt)
+let cachedDepartures: CachedData | null = null;
 
 async function sendTelegramMessage(chatId: number, text: string): Promise<void> {
   if (!TELEGRAM_BOT_TOKEN) {
@@ -62,13 +71,29 @@ async function sendTelegramMessage(chatId: number, text: string): Promise<void> 
 }
 
 async function getBerlinHbfDepartures(): Promise<string> {
+  // Cache prüfen
+  const now = Date.now();
+  if (cachedDepartures && (now - cachedDepartures.timestamp) < CACHE_DURATION_MS) {
+    console.log("Returning cached data");
+    return cachedDepartures.message + "\n\n<i>ℹ️ Daten werden alle 3 Minuten aktualisiert</i>";
+  }
+
   try {
     const url = `${DB_API_BASE}/stops/8011160/departures?duration=120&results=100`;
     
+    console.log("Fetching fresh data from DB API...");
     const response = await fetch(url);
     
     if (!response.ok) {
       console.error("DB API HTTP error:", response.status);
+      const errorText = await response.text();
+      console.error("Error body:", errorText);
+      
+      // Falls Rate Limit: gecachte Daten zurückgeben (wenn vorhanden)
+      if (response.status === 429 && cachedDepartures) {
+        return cachedDepartures.message + "\n\n<i>⚠️ API-Limit erreicht - zeige letzte Daten</i>";
+      }
+      
       throw new Error(`DB API error: ${response.status}`);
     }
     
@@ -100,7 +125,9 @@ async function getBerlinHbfDepartures(): Promise<string> {
     });
     
     if (trainDepartures.length === 0) {
-      return "Keine Fern- oder Regionalzüge in den nächsten 2 Stunden gefunden.";
+      const message = "Keine Fern- oder Regionalzüge in den nächsten 2 Stunden gefunden.";
+      cachedDepartures = { message, timestamp: now };
+      return message;
     }
     
     let message = "<b>🚂 Berlin Hauptbahnhof - Nächste 2 Stunden</b>\n";
@@ -131,10 +158,20 @@ async function getBerlinHbfDepartures(): Promise<string> {
       message += `<b>${dep.line.name}</b> → ${dep.direction}\n\n`;
     });
     
+    // Cache updaten
+    cachedDepartures = { message, timestamp: now };
+    console.log("Cache updated successfully");
+    
     return message;
     
   } catch (error) {
     console.error("Error fetching DB data:", error);
+    
+    // Bei Fehler: alte gecachte Daten zurückgeben (falls vorhanden)
+    if (cachedDepartures) {
+      return cachedDepartures.message + "\n\n<i>⚠️ Aktuelle Daten nicht verfügbar - zeige letzte Daten</i>";
+    }
+    
     if (error instanceof Error) {
       console.error("Error details:", error.message, error.stack);
     }
