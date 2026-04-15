@@ -56,6 +56,17 @@ export default function BoxPage() {
     }
   };
 
+  const getTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      AGL: "bg-blue-500",
+      TEQ: "bg-green-500",
+      INT: "bg-purple-500",
+      STR: "bg-red-500",
+      PHY: "bg-orange-500",
+    };
+    return colors[type] || "bg-indigo-500";
+  };
+
   if (!mounted) {
     return null;
   }
@@ -135,15 +146,11 @@ export default function BoxPage() {
                 key={idx}
                 className={`p-4 ${getCardClassName(char.rarity)} bg-card/90 backdrop-blur-sm transition-all hover:scale-105`}
               >
-                <div className="aspect-square relative mb-3 rounded-lg overflow-hidden bg-gradient-to-br from-muted/50 to-background">
+                <div className={`aspect-square relative mb-3 rounded-lg overflow-hidden ${getTypeColor(char.type)}`}>
                   <img 
                     src={char.imageUrl} 
                     alt={char.name}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=200&background=random&bold=true`;
-                    }}
                   />
                 </div>
                 <Badge className="w-full justify-center mb-2 font-bold text-xs">{char.rarity}</Badge>

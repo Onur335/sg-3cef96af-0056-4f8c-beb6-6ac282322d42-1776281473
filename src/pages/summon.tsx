@@ -82,6 +82,17 @@ export default function SummonPage() {
     }
   };
 
+  const getTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      AGL: "bg-blue-500",
+      TEQ: "bg-green-500",
+      INT: "bg-purple-500",
+      STR: "bg-red-500",
+      PHY: "bg-orange-500",
+    };
+    return colors[type] || "bg-indigo-500";
+  };
+
   if (!mounted) {
     return null;
   }
@@ -99,15 +110,11 @@ export default function SummonPage() {
                   key={idx}
                   className={`p-4 ${getCardClassName(char.rarity)} bg-card/90 backdrop-blur-sm transition-all hover:scale-105`}
                 >
-                  <div className="aspect-square relative mb-3 rounded-lg overflow-hidden bg-gradient-to-br from-muted/50 to-background">
+                  <div className={`aspect-square relative mb-3 rounded-lg overflow-hidden ${getTypeColor(char.type)}`}>
                     <img 
                       src={char.imageUrl} 
                       alt={char.name}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=200&background=random&bold=true`;
-                      }}
                     />
                   </div>
                   <Badge className="w-full justify-center mb-2 font-bold text-xs">{char.rarity}</Badge>
@@ -150,18 +157,15 @@ export default function SummonPage() {
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
                   {selectedBanner.featuredCharacters.slice(0, 8).map((char) => (
                     <div key={char.id} className="space-y-2">
-                      <div className="aspect-square relative rounded-lg overflow-hidden bg-gradient-to-br from-muted/50 to-background border-2 border-primary/30">
+                      <div className={`aspect-square relative rounded-lg overflow-hidden ${getTypeColor(char.type)} border-2 border-primary/30`}>
                         <img 
                           src={char.imageUrl} 
                           alt={char.name}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=200&background=random&bold=true`;
-                          }}
                         />
                       </div>
                       <Badge className="w-full justify-center text-xs font-bold">{char.rarity}</Badge>
+                      <p className="text-xs text-center font-semibold line-clamp-2">{char.name}</p>
                     </div>
                   ))}
                 </div>
@@ -226,15 +230,11 @@ export default function SummonPage() {
                 <h3 className="text-xl font-display font-bold text-center">{banner.name}</h3>
                 <div className="grid grid-cols-4 gap-2">
                   {banner.featuredCharacters.slice(0, 4).map((char) => (
-                    <div key={char.id} className="aspect-square relative rounded-md overflow-hidden bg-gradient-to-br from-muted/50 to-background border border-primary/20">
+                    <div key={char.id} className={`aspect-square relative rounded-md overflow-hidden ${getTypeColor(char.type)} border border-primary/20`}>
                       <img 
                         src={char.imageUrl} 
                         alt={char.name}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=100&background=random&bold=true`;
-                        }}
                       />
                     </div>
                   ))}

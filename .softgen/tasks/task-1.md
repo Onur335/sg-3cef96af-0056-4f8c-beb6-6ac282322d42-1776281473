@@ -43,3 +43,4 @@ Privates Dokkan Battle Gacha-System nur für persönlichen Gebrauch.
 - [x] 5 Banner-Daten: Featured/Unfeatured Character Lists (nur SR+)
 - [x] Design System: Dokkan-inspirierte Farben, Fonts, UI-Komponenten
 - [x] Mobile Optimization: Touch-friendly, responsive Layout
+- [x] Character Images: Type-basierte farbige Avatare mit Initialen
