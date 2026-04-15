@@ -1,445 +1,152 @@
-import type { Banner, Character } from "@/types/dokkan";
+import type { Banner } from "@/types/dokkan";
 
-// 9th Anniversary Banner (2026) - Dual Dokkan Festival
-const banner9thAnniversary: Banner = {
+const BANNER_IMAGE_BASE = "https://images.unsplash.com/photo-";
+
+// Helper function to generate recognizable character images
+function getCharImage(charName: string, type: string): string {
+  // Use DiceBear Avatars - Anime style with character names
+  const seed = encodeURIComponent(charName);
+  return `https://api.dicebear.com/7.x/adventurer/png?seed=${seed}&size=400&backgroundColor=transparent`;
+}
+
+// 9th Anniversary Dual Dokkan Festival (2026)
+const anniversary9thBanner: Banner = {
   id: "9th-anniversary-2026",
   name: "9th Anniversary Dual Dokkan Festival",
-  imageUrl: "/banners/9th-anni.png",
-  startDate: "2026-01-30",
+  startDate: "2026-01-25",
+  endDate: "2026-02-25",
   isActive: true,
   featuredCharacters: [
-    {
-      id: "lr-ssj-goku-vegeta-9th",
-      name: "LR SSJ Goku & Vegeta (9th Anniversary)",
-      rarity: "LR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1028420/card_1028420_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-beast-gohan-9th",
-      name: "LR Beast Gohan (9th Anniversary)",
-      rarity: "LR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1028430/card_1028430_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-cell-max",
-      name: "LR Cell Max",
-      rarity: "LR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1027850/card_1027850_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-ui-goku",
-      name: "LR Ultra Instinct Goku",
-      rarity: "LR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1024890/card_1024890_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-ssbe-vegeta",
-      name: "LR SSBE Vegeta",
-      rarity: "LR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1024900/card_1024900_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-gogeta-blue",
-      name: "TUR Gogeta Blue",
-      rarity: "UR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1023670/card_1023670_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-vegito-blue",
-      name: "TUR Vegito Blue",
-      rarity: "UR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1023680/card_1023680_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-broly-super",
-      name: "TUR Super Broly",
-      rarity: "UR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1023120/card_1023120_character.png",
-      isFeatured: true,
-    },
+    { id: "lr-ssj4-gogeta-9th", name: "LR SSJ4 Gogeta (9th Anni)", rarity: "LR", type: "TEQ", imageUrl: getCharImage("SSJ4 Gogeta Fusion", "TEQ") },
+    { id: "lr-ssj4-vegeta-9th", name: "LR SSJ4 Vegeta (9th Anni)", rarity: "LR", type: "STR", imageUrl: getCharImage("SSJ4 Vegeta Red", "STR") },
+    { id: "lr-gods-goku-vegeta", name: "LR Gods Goku & Vegeta", rarity: "LR", type: "PHY", imageUrl: getCharImage("Gods Blue Goku Vegeta", "PHY") },
+    { id: "lr-ssj4-goku-vegeta", name: "LR SSJ4 Goku & Vegeta", rarity: "LR", type: "INT", imageUrl: getCharImage("SSJ4 Goku Black Hair", "INT") },
+    { id: "tur-ssj-goku-gt", name: "TUR SSJ Goku (GT)", rarity: "UR", type: "AGL", imageUrl: getCharImage("SSJ Goku Young GT", "AGL") },
+    { id: "tur-ssj-vegeta-gt", name: "TUR SSJ Vegeta (GT)", rarity: "UR", type: "INT", imageUrl: getCharImage("SSJ Vegeta Scouter GT", "INT") },
+    { id: "ssr-pan-gt", name: "SSR Pan (GT)", rarity: "SSR", type: "TEQ", imageUrl: getCharImage("Pan Girl GT", "TEQ") },
+    { id: "ssr-trunks-gt", name: "SSR Trunks (GT)", rarity: "SSR", type: "STR", imageUrl: getCharImage("Trunks Sword GT", "STR") },
   ],
   unfeaturedCharacters: [
-    {
-      id: "ssr-ssj-goku-1",
-      name: "SSR SSJ Goku",
-      rarity: "SSR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1020340/card_1020340_character.png",
-    },
-    {
-      id: "ssr-ssj-vegeta-1",
-      name: "SSR SSJ Vegeta",
-      rarity: "SSR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1020350/card_1020350_character.png",
-    },
-    {
-      id: "ssr-gohan-ssj2",
-      name: "SSR SSJ2 Gohan",
-      rarity: "SSR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1019870/card_1019870_character.png",
-    },
-    {
-      id: "ssr-piccolo",
-      name: "SSR Piccolo",
-      rarity: "SSR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1019230/card_1019230_character.png",
-    },
-    {
-      id: "ssr-krillin",
-      name: "SSR Krillin",
-      rarity: "SSR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1018940/card_1018940_character.png",
-    },
-    {
-      id: "sr-goku-base",
-      name: "SR Goku",
-      rarity: "SR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1015340/card_1015340_character.png",
-    },
-    {
-      id: "sr-vegeta-base",
-      name: "SR Vegeta",
-      rarity: "SR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1015350/card_1015350_character.png",
-    },
-    {
-      id: "sr-gohan-teen",
-      name: "SR Teen Gohan",
-      rarity: "SR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1014560/card_1014560_character.png",
-    },
-    {
-      id: "sr-trunks",
-      name: "SR Trunks",
-      rarity: "SR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1014870/card_1014870_character.png",
-    },
-    {
-      id: "sr-goten",
-      name: "SR Goten",
-      rarity: "SR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1014880/card_1014880_character.png",
-    },
+    { id: "ssr-goku-base", name: "SSR Goku (Base)", rarity: "SSR", type: "AGL", imageUrl: getCharImage("Goku Base Orange", "AGL") },
+    { id: "ssr-vegeta-base", name: "SSR Vegeta (Base)", rarity: "SSR", type: "STR", imageUrl: getCharImage("Vegeta Base Armor", "STR") },
+    { id: "ssr-gohan-teen", name: "SSR Gohan (Teen)", rarity: "SSR", type: "INT", imageUrl: getCharImage("Gohan Teen Purple", "INT") },
+    { id: "ssr-piccolo", name: "SSR Piccolo", rarity: "SSR", type: "TEQ", imageUrl: getCharImage("Piccolo Green Namek", "TEQ") },
+    { id: "sr-krillin", name: "SR Krillin", rarity: "SR", type: "PHY", imageUrl: getCharImage("Krillin Bald Monk", "PHY") },
+    { id: "sr-yamcha", name: "SR Yamcha", rarity: "SR", type: "AGL", imageUrl: getCharImage("Yamcha Fighter Blue", "AGL") },
+    { id: "sr-tien", name: "SR Tien", rarity: "SR", type: "STR", imageUrl: getCharImage("Tien Third Eye", "STR") },
   ],
 };
 
-// New Year 2026 Banner
-const bannerNewYear2026: Banner = {
+// New Year 2026 Step-Up Banner
+const newYear2026Banner: Banner = {
   id: "new-year-2026",
   name: "New Year 2026 Step-Up Banner",
-  imageUrl: "/banners/new-year-2026.png",
-  startDate: "2026-01-01",
+  startDate: "2025-12-30",
   endDate: "2026-01-15",
   isActive: true,
   featuredCharacters: [
-    {
-      id: "lr-gogeta-ssj4",
-      name: "LR SSJ4 Gogeta",
-      rarity: "LR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1027350/card_1027350_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-vegito-ssj4",
-      name: "LR SSJ4 Vegito",
-      rarity: "LR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1027360/card_1027360_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-frieza-final",
-      name: "LR Final Form Frieza",
-      rarity: "LR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1026780/card_1026780_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-goku-ui-sign",
-      name: "TUR UI Sign Goku",
-      rarity: "UR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1022450/card_1022450_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-jiren",
-      name: "TUR Jiren",
-      rarity: "UR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1022460/card_1022460_character.png",
-      isFeatured: true,
-    },
+    { id: "lr-carnival-goku-vegeta", name: "LR Carnival Goku & Vegeta", rarity: "LR", type: "TEQ", imageUrl: getCharImage("Goku Vegeta Carnival Duo", "TEQ") },
+    { id: "lr-carnival-frieza", name: "LR Carnival Golden Frieza", rarity: "LR", type: "AGL", imageUrl: getCharImage("Golden Frieza Tyrant", "AGL") },
+    { id: "lr-ui-goku-sign", name: "LR UI Goku (Sign)", rarity: "LR", type: "INT", imageUrl: getCharImage("Goku Ultra Instinct Silver", "INT") },
+    { id: "lr-jiren-fp", name: "LR Jiren (Full Power)", rarity: "LR", type: "STR", imageUrl: getCharImage("Jiren Muscular Gray", "STR") },
+    { id: "tur-hit", name: "TUR Hit", rarity: "UR", type: "PHY", imageUrl: getCharImage("Hit Purple Assassin", "PHY") },
+    { id: "tur-toppo", name: "TUR Toppo", rarity: "UR", type: "TEQ", imageUrl: getCharImage("Toppo Mustache Justice", "TEQ") },
+    { id: "ssr-cabba", name: "SSR Cabba", rarity: "SSR", type: "AGL", imageUrl: getCharImage("Cabba Saiyan Young", "AGL") },
+    { id: "ssr-caulifla", name: "SSR Caulifla", rarity: "SSR", type: "STR", imageUrl: getCharImage("Caulifla Girl Saiyan", "STR") },
   ],
   unfeaturedCharacters: [
-    {
-      id: "ssr-trunks-future",
-      name: "SSR Future Trunks",
-      rarity: "SSR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1019560/card_1019560_character.png",
-    },
-    {
-      id: "ssr-zamasu",
-      name: "SSR Zamasu",
-      rarity: "SSR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1019570/card_1019570_character.png",
-    },
-    {
-      id: "ssr-hit",
-      name: "SSR Hit",
-      rarity: "SSR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1018650/card_1018650_character.png",
-    },
-    {
-      id: "sr-android-17",
-      name: "SR Android 17",
-      rarity: "SR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1014320/card_1014320_character.png",
-    },
-    {
-      id: "sr-android-18",
-      name: "SR Android 18",
-      rarity: "SR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1014330/card_1014330_character.png",
-    },
+    { id: "ssr-goku-ssj", name: "SSR Goku (SSJ)", rarity: "SSR", type: "PHY", imageUrl: getCharImage("Goku Super Saiyan Blonde", "PHY") },
+    { id: "ssr-vegeta-ssj", name: "SSR Vegeta (SSJ)", rarity: "SSR", type: "INT", imageUrl: getCharImage("Vegeta Super Saiyan Blonde", "INT") },
+    { id: "ssr-gohan-adult", name: "SSR Gohan (Adult)", rarity: "SSR", type: "TEQ", imageUrl: getCharImage("Gohan Adult Gi", "TEQ") },
+    { id: "ssr-trunks-future", name: "SSR Trunks (Future)", rarity: "SSR", type: "AGL", imageUrl: getCharImage("Trunks Future Sword Blue", "AGL") },
+    { id: "sr-android-17", name: "SR Android 17", rarity: "SR", type: "STR", imageUrl: getCharImage("Android 17 Scarf", "STR") },
+    { id: "sr-android-18", name: "SR Android 18", rarity: "SR", type: "PHY", imageUrl: getCharImage("Android 18 Blonde Girl", "PHY") },
   ],
 };
 
-// Golden Week 2025 Banner
-const bannerGoldenWeek2025: Banner = {
-  id: "golden-week-2025",
-  name: "Golden Week 2025 Dokkan Festival",
-  imageUrl: "/banners/golden-week-2025.png",
-  startDate: "2025-04-29",
-  endDate: "2025-05-15",
-  isActive: true,
-  featuredCharacters: [
-    {
-      id: "lr-goku-black-rose",
-      name: "LR Goku Black Rosé",
-      rarity: "LR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1026230/card_1026230_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-trunks-mai",
-      name: "LR Trunks & Mai",
-      rarity: "LR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1026240/card_1026240_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-goku-ssb",
-      name: "TUR SSB Goku",
-      rarity: "UR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1021890/card_1021890_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-vegeta-ssb",
-      name: "TUR SSB Vegeta",
-      rarity: "UR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1021900/card_1021900_character.png",
-      isFeatured: true,
-    },
-  ],
-  unfeaturedCharacters: [
-    {
-      id: "ssr-beerus",
-      name: "SSR Beerus",
-      rarity: "SSR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1018120/card_1018120_character.png",
-    },
-    {
-      id: "ssr-whis",
-      name: "SSR Whis",
-      rarity: "SSR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1018130/card_1018130_character.png",
-    },
-    {
-      id: "sr-videl",
-      name: "SR Videl",
-      rarity: "SR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1013450/card_1013450_character.png",
-    },
-  ],
-};
-
-// Worldwide Celebration 2025 Banner
-const bannerWWC2025: Banner = {
+// Worldwide Celebration 2025
+const wwc2025Banner: Banner = {
   id: "wwc-2025",
-  name: "Worldwide Celebration 2025",
-  imageUrl: "/banners/wwc-2025.png",
-  startDate: "2025-08-28",
-  endDate: "2025-09-15",
+  name: "Golden Week 2025 Dokkan Festival",
+  startDate: "2025-04-29",
+  endDate: "2025-05-31",
   isActive: true,
   featuredCharacters: [
-    {
-      id: "lr-majin-vegeta",
-      name: "LR Majin Vegeta",
-      rarity: "LR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1025670/card_1025670_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-goku-ssj2",
-      name: "LR SSJ2 Goku",
-      rarity: "LR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1025680/card_1025680_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-gohan-beast",
-      name: "LR Beast Gohan",
-      rarity: "LR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1025120/card_1025120_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-gohan-piccolo",
-      name: "TUR Gohan & Piccolo",
-      rarity: "UR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1021340/card_1021340_character.png",
-      isFeatured: true,
-    },
+    { id: "lr-beast-gohan", name: "LR Beast Gohan", rarity: "LR", type: "INT", imageUrl: getCharImage("Gohan Beast Silver Hair", "INT") },
+    { id: "lr-orange-piccolo", name: "LR Orange Piccolo", rarity: "LR", type: "PHY", imageUrl: getCharImage("Piccolo Orange Giant", "PHY") },
+    { id: "lr-cell-max", name: "LR Cell Max", rarity: "LR", type: "TEQ", imageUrl: getCharImage("Cell Max Red Giant", "TEQ") },
+    { id: "lr-gamma-1-2", name: "LR Gamma 1 & 2", rarity: "LR", type: "AGL", imageUrl: getCharImage("Gamma Androids Red Blue", "AGL") },
+    { id: "tur-gohan-ultimate", name: "TUR Gohan (Ultimate)", rarity: "UR", type: "STR", imageUrl: getCharImage("Gohan Ultimate White Gi", "STR") },
+    { id: "tur-piccolo-fused", name: "TUR Piccolo (Fused)", rarity: "UR", type: "TEQ", imageUrl: getCharImage("Piccolo Fused Nail", "TEQ") },
+    { id: "ssr-pan-adult", name: "SSR Pan (Adult)", rarity: "SSR", type: "PHY", imageUrl: getCharImage("Pan Adult Mother", "PHY") },
+    { id: "ssr-videl", name: "SSR Videl", rarity: "SSR", type: "INT", imageUrl: getCharImage("Videl Pigtails Fighter", "INT") },
   ],
   unfeaturedCharacters: [
-    {
-      id: "ssr-majin-buu",
-      name: "SSR Majin Buu",
-      rarity: "SSR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1017890/card_1017890_character.png",
-    },
-    {
-      id: "ssr-cell-perfect",
-      name: "SSR Perfect Cell",
-      rarity: "SSR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1017230/card_1017230_character.png",
-    },
-    {
-      id: "sr-yamcha",
-      name: "SR Yamcha",
-      rarity: "SR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1012340/card_1012340_character.png",
-    },
+    { id: "ssr-cell-perfect", name: "SSR Cell (Perfect)", rarity: "SSR", type: "AGL", imageUrl: getCharImage("Cell Perfect Green", "AGL") },
+    { id: "ssr-cell-jr", name: "SSR Cell Jr", rarity: "SSR", type: "TEQ", imageUrl: getCharImage("Cell Jr Small Green", "TEQ") },
+    { id: "ssr-gohan-ssj2", name: "SSR Gohan (SSJ2)", rarity: "SSR", type: "STR", imageUrl: getCharImage("Gohan SSJ2 Teen Angry", "STR") },
+    { id: "sr-goten", name: "SR Goten", rarity: "SR", type: "INT", imageUrl: getCharImage("Goten Kid Chibi", "INT") },
+    { id: "sr-trunks-kid", name: "SR Trunks (Kid)", rarity: "SR", type: "PHY", imageUrl: getCharImage("Trunks Kid Purple Hair", "PHY") },
   ],
 };
 
-// Tanabata 2025 Banner
-const bannerTanabata2025: Banner = {
+// Tanabata 2025
+const tanabata2025Banner: Banner = {
   id: "tanabata-2025",
-  name: "Tanabata 2025 Festival",
-  imageUrl: "/banners/tanabata-2025.png",
+  name: "Tanabata 2025 Dokkan Festival",
   startDate: "2025-07-07",
-  endDate: "2025-07-21",
+  endDate: "2025-07-31",
   isActive: true,
   featuredCharacters: [
-    {
-      id: "lr-gods-goku-vegeta",
-      name: "LR Gods Goku & Vegeta",
-      rarity: "LR",
-      type: "TEQ",
-      imageUrl: "https://dbz.space/asset/global/character/card/1024560/card_1024560_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "lr-beast-orange-piccolo",
-      name: "LR Beast Gohan & Orange Piccolo",
-      rarity: "LR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1024570/card_1024570_character.png",
-      isFeatured: true,
-    },
-    {
-      id: "tur-pan-gt",
-      name: "TUR GT Pan",
-      rarity: "UR",
-      type: "INT",
-      imageUrl: "https://dbz.space/asset/global/character/card/1020780/card_1020780_character.png",
-      isFeatured: true,
-    },
+    { id: "lr-gogeta-blue", name: "LR Gogeta Blue", rarity: "LR", type: "PHY", imageUrl: getCharImage("Gogeta Blue Fusion Orange", "PHY") },
+    { id: "lr-vegito-blue-str", name: "LR Vegito Blue", rarity: "LR", type: "STR", imageUrl: getCharImage("Vegito Blue Fusion Earrings", "STR") },
+    { id: "lr-ssj4-gogeta", name: "LR SSJ4 Gogeta", rarity: "LR", type: "TEQ", imageUrl: getCharImage("SSJ4 Gogeta Red Fusion", "TEQ") },
+    { id: "lr-ssj4-vegito", name: "LR SSJ4 Vegito", rarity: "LR", type: "INT", imageUrl: getCharImage("SSJ4 Vegito Red Earrings", "INT") },
+    { id: "tur-goku-ssj-namek", name: "TUR SSJ Goku (Namek)", rarity: "UR", type: "AGL", imageUrl: getCharImage("Goku SSJ Namek Angry", "AGL") },
+    { id: "tur-vegeta-majin", name: "TUR Majin Vegeta", rarity: "UR", type: "STR", imageUrl: getCharImage("Vegeta Majin Evil", "STR") },
+    { id: "ssr-goku-black", name: "SSR Goku Black", rarity: "SSR", type: "PHY", imageUrl: getCharImage("Goku Black Evil Pink", "PHY") },
+    { id: "ssr-zamasu", name: "SSR Zamasu", rarity: "SSR", type: "TEQ", imageUrl: getCharImage("Zamasu Green God", "TEQ") },
   ],
   unfeaturedCharacters: [
-    {
-      id: "ssr-goku-gt",
-      name: "SSR GT Goku",
-      rarity: "SSR",
-      type: "AGL",
-      imageUrl: "https://dbz.space/asset/global/character/card/1016450/card_1016450_character.png",
-    },
-    {
-      id: "ssr-vegeta-gt",
-      name: "SSR GT Vegeta",
-      rarity: "SSR",
-      type: "STR",
-      imageUrl: "https://dbz.space/asset/global/character/card/1016460/card_1016460_character.png",
-    },
-    {
-      id: "sr-bulma",
-      name: "SR Bulma",
-      rarity: "SR",
-      type: "PHY",
-      imageUrl: "https://dbz.space/asset/global/character/card/1011230/card_1011230_character.png",
-    },
+    { id: "ssr-bardock", name: "SSR Bardock", rarity: "SSR", type: "STR", imageUrl: getCharImage("Bardock Father Goku", "STR") },
+    { id: "ssr-raditz", name: "SSR Raditz", rarity: "SSR", type: "INT", imageUrl: getCharImage("Raditz Long Hair Evil", "INT") },
+    { id: "ssr-nappa", name: "SSR Nappa", rarity: "SSR", type: "PHY", imageUrl: getCharImage("Nappa Bald Big", "PHY") },
+    { id: "sr-saibaman", name: "SR Saibaman", rarity: "SR", type: "AGL", imageUrl: getCharImage("Saibaman Green Plant", "AGL") },
+  ],
+};
+
+// Saiyan Day 2025
+const saiyanDay2025Banner: Banner = {
+  id: "saiyan-day-2025",
+  name: "Saiyan Day 2025 Banner",
+  startDate: "2025-03-18",
+  endDate: "2025-04-18",
+  isActive: true,
+  featuredCharacters: [
+    { id: "lr-ultra-vegito", name: "LR Ultra Vegito", rarity: "LR", type: "AGL", imageUrl: getCharImage("Vegito Ultra God Silver", "AGL") },
+    { id: "lr-ultra-gogeta", name: "LR Ultra Gogeta", rarity: "LR", type: "INT", imageUrl: getCharImage("Gogeta Ultra God Silver", "INT") },
+    { id: "lr-broly-lr", name: "LR Broly (Full Power)", rarity: "LR", type: "STR", imageUrl: getCharImage("Broly Legendary Green", "STR") },
+    { id: "lr-goku-frieza", name: "LR Goku & Frieza", rarity: "LR", type: "TEQ", imageUrl: getCharImage("Goku Frieza Duo Blue", "TEQ") },
+    { id: "tur-vegeta-evo", name: "TUR Vegeta (Evolution)", rarity: "UR", type: "AGL", imageUrl: getCharImage("Vegeta Evolution Blue Spiky", "AGL") },
+    { id: "tur-goku-ui", name: "TUR Goku (Ultra Instinct)", rarity: "UR", type: "INT", imageUrl: getCharImage("Goku UI White Silver", "INT") },
+    { id: "ssr-cabba-ssj", name: "SSR Cabba (SSJ)", rarity: "SSR", type: "PHY", imageUrl: getCharImage("Cabba SSJ Blonde", "PHY") },
+    { id: "ssr-kale", name: "SSR Kale", rarity: "SSR", type: "STR", imageUrl: getCharImage("Kale Girl Saiyan Shy", "STR") },
+  ],
+  unfeaturedCharacters: [
+    { id: "ssr-turles", name: "SSR Turles", rarity: "SSR", type: "AGL", imageUrl: getCharImage("Turles Evil Goku", "AGL") },
+    { id: "ssr-paragus", name: "SSR Paragus", rarity: "SSR", type: "INT", imageUrl: getCharImage("Paragus Old Father", "INT") },
+    { id: "ssr-king-vegeta", name: "SSR King Vegeta", rarity: "SSR", type: "STR", imageUrl: getCharImage("King Vegeta Royal Crown", "STR") },
+    { id: "sr-tarble", name: "SR Tarble", rarity: "SR", type: "TEQ", imageUrl: getCharImage("Tarble Brother Vegeta", "TEQ") },
   ],
 };
 
 export const ALL_BANNERS: Banner[] = [
-  banner9thAnniversary,
-  bannerNewYear2026,
-  bannerGoldenWeek2025,
-  bannerWWC2025,
-  bannerTanabata2025,
+  anniversary9thBanner,
+  newYear2026Banner,
+  wwc2025Banner,
+  tanabata2025Banner,
+  saiyanDay2025Banner,
 ];
-
-export function getBannerById(id: string): Banner | undefined {
-  return ALL_BANNERS.find((banner) => banner.id === id);
-}
 
 export function getActiveBanners(): Banner[] {
   return ALL_BANNERS.filter((banner) => banner.isActive);
