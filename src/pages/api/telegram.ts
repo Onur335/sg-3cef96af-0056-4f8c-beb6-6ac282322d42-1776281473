@@ -47,7 +47,7 @@ interface CachedData {
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DB_API_BASE = "https://v6.db.transport.rest";
-const CACHE_DURATION_MS = 3 * 60 * 1000; // 3 Minuten Cache
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 Minuten Cache
 
 // In-Memory Cache (wird zwischen Requests geteilt)
 let cachedDepartures: CachedData | null = null;
