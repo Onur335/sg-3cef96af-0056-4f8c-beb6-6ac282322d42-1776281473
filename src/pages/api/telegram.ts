@@ -219,25 +219,28 @@ async function getBundesligaMatches(): Promise<string> {
     const matches = await response.json() as BundesligaMatch[];
     
     const berlinTeams = ["Union Berlin", "Hertha BSC"];
-    const now = new Date();
-    const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const today = new Date();
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    endOfMonth.setHours(23, 59, 59, 999);
     
     const relevantMatches = matches.filter((match: BundesligaMatch) => {
       const matchDate = new Date(match.matchDateTime);
       const hasBerlinTeam = 
         berlinTeams.includes(match.team1.teamName) || 
         berlinTeams.includes(match.team2.teamName);
-      const isUpcoming = matchDate >= now && matchDate <= nextWeek;
-      return hasBerlinTeam && isUpcoming;
+      const isThisMonth = matchDate >= today && matchDate <= endOfMonth;
+      return hasBerlinTeam && isThisMonth;
     });
     
     if (relevantMatches.length === 0) {
-      const message = "⚽ <b>Fußball Berlin</b>\n\nKeine Spiele in den nächsten 7 Tagen.";
-      cachedFootball = { message, timestamp: now.getTime() };
+      const monthName = today.toLocaleDateString("de-DE", { month: "long" });
+      const message = `⚽ <b>Fußball Berlin</b>\n\nKeine Spiele mehr im ${monthName}.`;
+      cachedFootball = { message, timestamp: Date.now() };
       return message;
     }
     
-    let message = "⚽ <b>Fußball Berlin - Nächste 7 Tage</b>\n\n";
+    const monthName = today.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+    let message = `⚽ <b>Fußball Berlin - ${monthName}</b>\n\n`;
     
     relevantMatches.forEach((match: BundesligaMatch) => {
       const matchDate = new Date(match.matchDateTime);
@@ -277,7 +280,7 @@ async function getBundesligaMatches(): Promise<string> {
       message += `${address}\n\n`;
     });
     
-    cachedFootball = { message, timestamp: now.getTime() };
+    cachedFootball = { message, timestamp: Date.now() };
     console.log("Football cache updated");
     
     return message;
