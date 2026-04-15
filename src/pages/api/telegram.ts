@@ -88,6 +88,7 @@ async function getBerlinHbfDepartures(): Promise<string> {
       
       const lineName = dep.line.name.trim();
       
+      // NUR Fernverkehr und Regionalverkehr
       const isICE = lineName.startsWith("ICE");
       const isIC = lineName.startsWith("IC ") || lineName === "IC";
       const isEC = lineName.startsWith("EC ");
