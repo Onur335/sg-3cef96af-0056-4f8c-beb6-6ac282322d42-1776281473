@@ -88,19 +88,14 @@ async function getBerlinHbfDepartures(): Promise<string> {
       
       const lineName = dep.line.name.trim();
       
-      // Fernverkehr: ICE, IC, EC
-      const isFernverkehr = 
-        lineName.startsWith("ICE") || 
-        lineName.startsWith("IC ") || 
-        lineName.startsWith("EC ");
+      const isICE = lineName.startsWith("ICE");
+      const isIC = lineName.startsWith("IC ") || lineName === "IC";
+      const isEC = lineName.startsWith("EC ");
+      const isRE = lineName.startsWith("RE");
+      const isRB = lineName.startsWith("RB");
+      const isIRE = lineName.startsWith("IRE");
       
-      // Regionalverkehr: RE, RB, IRE
-      const isRegional = 
-        lineName.startsWith("RE") || 
-        lineName.startsWith("RB") || 
-        lineName.startsWith("IRE");
-      
-      return isFernverkehr || isRegional;
+      return isICE || isIC || isEC || isRE || isRB || isIRE;
     });
     
     if (trainDepartures.length === 0) {
