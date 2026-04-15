@@ -13,6 +13,7 @@ function getCharImage(charName: string, type: string): string {
 const anniversary9thBanner: Banner = {
   id: "9th-anniversary-2026",
   name: "9th Anniversary Dual Dokkan Festival",
+  imageUrl: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=80",
   startDate: "2026-01-25",
   endDate: "2026-02-25",
   isActive: true,
@@ -41,6 +42,7 @@ const anniversary9thBanner: Banner = {
 const newYear2026Banner: Banner = {
   id: "new-year-2026",
   name: "New Year 2026 Step-Up Banner",
+  imageUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
   startDate: "2025-12-30",
   endDate: "2026-01-15",
   isActive: true,
@@ -68,6 +70,7 @@ const newYear2026Banner: Banner = {
 const wwc2025Banner: Banner = {
   id: "wwc-2025",
   name: "Golden Week 2025 Dokkan Festival",
+  imageUrl: "https://images.unsplash.com/photo-1580477667995-156081016629?w=800&auto=format&fit=crop&q=80",
   startDate: "2025-04-29",
   endDate: "2025-05-31",
   isActive: true,
@@ -94,6 +97,7 @@ const wwc2025Banner: Banner = {
 const tanabata2025Banner: Banner = {
   id: "tanabata-2025",
   name: "Tanabata 2025 Dokkan Festival",
+  imageUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80",
   startDate: "2025-07-07",
   endDate: "2025-07-31",
   isActive: true,
@@ -119,6 +123,7 @@ const tanabata2025Banner: Banner = {
 const saiyanDay2025Banner: Banner = {
   id: "saiyan-day-2025",
   name: "Saiyan Day 2025 Banner",
+  imageUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=800&auto=format&fit=crop&q=80",
   startDate: "2025-03-18",
   endDate: "2025-04-18",
   isActive: true,
