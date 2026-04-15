@@ -1,34 +1,45 @@
 ---
-title: Telegram Bot Integration mit Deutsche Bahn API
-status: done
-priority: high
+title: Dokkan Battle Gacha Simulator - Core System
+status: in_progress
+priority: urgent
 type: feature
-tags: [telegram, api, db]
+tags: [gacha, dokkan, gaming]
 created_by: agent
-created_at: 2026-04-15T11:49:00Z
+created_at: 2026-04-15T19:16:47Z
 position: 1
 ---
 
 ## Notes
-Bau einen Telegram Bot, der auf Commands reagiert und Zugdaten von der Deutschen Bahn API abruft.
 
-Anforderungen:
-- Telegram Webhook-Handler für Bot-Messages
-- Command `/hbf`: Zeigt alle Fernzüge + Regionalzüge der nächsten 2h in Berlin Hauptbahnhof
-- Integration mit öffentlicher DB API (transport.rest oder ähnlich)
-- Anzeige von Verspätungen, Plattformen, Zielbahnhöfen
-- Formatierte, benutzerfreundliche Telegram-Nachrichten
+Privates Dokkan Battle Gacha-System nur für persönlichen Gebrauch.
 
-Tech Stack:
-- Next.js API Routes für Webhook
-- Öffentliche DB API (keine zusätzlichen API-Keys erforderlich)
-- TypeScript für Type Safety
+**Anforderungen:**
+- Gacha-Mechanik mit Single/Multi Summons
+- GSSR (Guaranteed SSR) auf Multi-Summons
+- Admin Panel: Dragon Stones hinzufügen, Banner aktivieren/deaktivieren
+- Charakterliste mit Filter/Sort (Rarity, Type)
+- Nur SR, SSR, UR, LR (keine R/N)
+- 5 neueste Banner (2025-2026)
+- Keine Ticket/Elder Kai Banner
+- Lokale Speicherung (localStorage)
+- Mobile-optimiert (Handy Browser)
+- Echte Dokkan Battle Bilder von dbz.space
+
+**Design:**
+- Dokkan Battle-inspiriertes UI
+- Orange/Gold Akzente (Dragon Ball Farben)
+- Dunkles Theme mit energetischen Highlights
+- Animierte Pull-Sequenzen
 
 ## Checklist
-- [ ] API-Route `/api/telegram` für Telegram Webhooks erstellen
-- [ ] Command-Handler System implementieren
-- [ ] `/hbf` Command: DB API-Integration für Berlin Hauptbahnhof
-- [ ] Funktion zum Abrufen von Zugdaten (nächste 2h, Fern- & Regionalzüge)
-- [ ] Formatierung der Telegram-Nachrichten (übersichtliche Darstellung)
-- [ ] Error Handling & Logging
-- [ ] README mit Deployment-Anleitung erstellen
+
+- [ ] Core Data Structures: Character, Banner, User Profile types
+- [ ] Gacha Logic: Pull-Mechanik mit Rarity-Rates (SSR ~10%, Featured ~0.5%)
+- [ ] localStorage Service: Speichern/Laden von User-Daten
+- [ ] HomePage: Main Menu mit Navigation
+- [ ] Summon Page: Banner-Auswahl, Single/Multi Buttons, Pull-Animation
+- [ ] Character Box: Liste aller gezogenen Characters mit Filter/Sort
+- [ ] Admin Panel: Stones hinzufügen, Banner aktivieren/deaktivieren
+- [ ] 5 Banner-Daten: Featured/Unfeatured Character Lists (nur SR+)
+- [ ] Design System: Dokkan-inspirierte Farben, Fonts, UI-Komponenten
+- [ ] Mobile Optimization: Touch-friendly, responsive Layout
