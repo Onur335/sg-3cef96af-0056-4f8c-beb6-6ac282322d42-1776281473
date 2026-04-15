@@ -233,7 +233,7 @@ async function getBundesligaMatches(): Promise<string> {
     
     if (relevantMatches.length === 0) {
       const message = "⚽ <b>Fußball Berlin</b>\n\nKeine Spiele in den nächsten 7 Tagen.";
-      cachedFootball = { message, timestamp: now };
+      cachedFootball = { message, timestamp: now.getTime() };
       return message;
     }
     
@@ -277,7 +277,7 @@ async function getBundesligaMatches(): Promise<string> {
       message += `${address}\n\n`;
     });
     
-    cachedFootball = { message, timestamp: now };
+    cachedFootball = { message, timestamp: now.getTime() };
     console.log("Football cache updated");
     
     return message;
