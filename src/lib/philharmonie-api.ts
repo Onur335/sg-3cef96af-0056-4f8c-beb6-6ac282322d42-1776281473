@@ -16,18 +16,26 @@ export async function getPhilharmonieEvents(): Promise<string> {
     // Berliner Philharmonie API
     const url = `https://api.berliner-philharmoniker.de/v1/events?date=${dateStr}`;
     
+    console.log("Fetching Philharmonie events from:", url);
+    
     const response = await fetch(url, {
       headers: {
         'Accept': 'application/json',
       },
     });
     
+    console.log("Philharmonie API status:", response.status);
+    console.log("Philharmonie API headers:", Object.fromEntries(response.headers.entries()));
+    
     if (!response.ok) {
       console.error("Philharmonie API error:", response.status);
+      const errorText = await response.text();
+      console.error("Error body:", errorText);
       throw new Error(`API error: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log("Philharmonie API response:", JSON.stringify(data, null, 2));
     
     // Falls keine Events heute
     if (!data.events || data.events.length === 0) {
