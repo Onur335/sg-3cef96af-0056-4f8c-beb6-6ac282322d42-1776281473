@@ -44,33 +44,47 @@ export default function BoxPage() {
     setFilteredCharacters(filtered);
   }, [characters, rarityFilter, typeFilter, sortBy]);
 
+  const getCardClassName = (rarity: string) => {
+    switch (rarity) {
+      case "LR":
+        return "card-glow-lr";
+      case "UR":
+      case "SSR":
+        return "card-glow-ssr";
+      default:
+        return "card-glow-sr";
+    }
+  };
+
   if (!mounted) {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-8 space-y-6">
+    <div className="min-h-screen">
+      <div className="container py-8 space-y-8">
         <div className="flex items-center justify-between">
           <Link href="/">
-            <Button variant="ghost">
+            <Button variant="ghost" className="hover:bg-primary/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
           </Link>
-          <p className="text-lg">
-            <span className="font-display font-bold">{filteredCharacters.length}</span>
-            <span className="text-muted-foreground"> / {characters.length}</span>
-          </p>
+          <div className="px-6 py-3 rounded-full bg-card/80 backdrop-blur-sm border border-primary/30">
+            <p className="text-lg font-semibold">
+              <span className="font-display font-bold text-primary">{filteredCharacters.length}</span>
+              <span className="text-muted-foreground"> / {characters.length}</span>
+            </p>
+          </div>
         </div>
 
         <div className="text-center">
-          <h2 className="text-4xl font-display font-bold">CHARACTER BOX</h2>
+          <h2 className="text-5xl font-display font-bold">CHARACTER BOX</h2>
         </div>
 
         <div className="flex flex-wrap gap-3 justify-center">
           <Select value={rarityFilter} onValueChange={setRarityFilter}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[160px] bg-card/80 backdrop-blur-sm border-primary/30">
               <SelectValue placeholder="Rarity" />
             </SelectTrigger>
             <SelectContent>
@@ -83,7 +97,7 @@ export default function BoxPage() {
           </Select>
 
           <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[160px] bg-card/80 backdrop-blur-sm border-primary/30">
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent>
@@ -97,7 +111,7 @@ export default function BoxPage() {
           </Select>
 
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[160px] bg-card/80 backdrop-blur-sm border-primary/30">
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
             <SelectContent>
@@ -109,8 +123,8 @@ export default function BoxPage() {
         </div>
 
         {filteredCharacters.length === 0 ? (
-          <Card className="p-12 text-center">
-            <p className="text-lg text-muted-foreground">
+          <Card className="p-16 text-center bg-card/80 backdrop-blur-sm">
+            <p className="text-xl text-muted-foreground font-semibold">
               {characters.length === 0 ? "No characters yet. Go summon!" : "No characters match your filters."}
             </p>
           </Card>
@@ -119,22 +133,22 @@ export default function BoxPage() {
             {filteredCharacters.map((char, idx) => (
               <Card 
                 key={idx}
-                className={`p-4 ${
-                  char.rarity === "LR" ? "card-glow-lr border-dokkan-blue" : 
-                  char.rarity === "UR" || char.rarity === "SSR" ? "card-glow-ssr border-dokkan-gold" : 
-                  ""
-                }`}
+                className={`p-4 ${getCardClassName(char.rarity)} bg-card/90 backdrop-blur-sm transition-all hover:scale-105`}
               >
-                <div className="aspect-square relative mb-2">
+                <div className="aspect-square relative mb-3 rounded-lg overflow-hidden bg-gradient-to-br from-muted/50 to-background">
                   <img 
                     src={char.imageUrl} 
                     alt={char.name}
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(char.name)}&size=200&background=random&bold=true`;
+                    }}
                   />
                 </div>
-                <Badge className="w-full justify-center mb-1">{char.rarity}</Badge>
-                <Badge variant="outline" className="w-full justify-center">{char.type}</Badge>
-                <p className="text-xs text-center mt-2 line-clamp-2">{char.name}</p>
+                <Badge className="w-full justify-center mb-2 font-bold text-xs">{char.rarity}</Badge>
+                <Badge variant="outline" className="w-full justify-center mb-2 font-semibold text-xs">{char.type}</Badge>
+                <p className="text-xs text-center font-semibold line-clamp-2">{char.name}</p>
               </Card>
             ))}
           </div>

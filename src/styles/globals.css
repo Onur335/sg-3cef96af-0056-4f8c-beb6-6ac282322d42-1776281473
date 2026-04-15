@@ -6,41 +6,41 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
-    --foreground: 36 100% 95%;
+    --background: 20 30% 8%;
+    --foreground: 40 100% 98%;
     
-    --card: 222 47% 14%;
-    --card-foreground: 36 100% 95%;
+    --card: 25 35% 12%;
+    --card-foreground: 40 100% 98%;
     
-    --popover: 222 47% 11%;
-    --popover-foreground: 36 100% 95%;
+    --popover: 25 35% 12%;
+    --popover-foreground: 40 100% 98%;
     
-    --primary: 24 100% 50%;
+    --primary: 24 100% 55%;
     --primary-foreground: 0 0% 0%;
     
-    --secondary: 45 100% 51%;
+    --secondary: 45 100% 55%;
     --secondary-foreground: 0 0% 0%;
     
-    --muted: 222 30% 20%;
-    --muted-foreground: 36 50% 70%;
+    --muted: 25 25% 18%;
+    --muted-foreground: 40 40% 75%;
     
-    --accent: 33 100% 50%;
+    --accent: 33 100% 55%;
     --accent-foreground: 0 0% 0%;
     
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 100%;
     
-    --border: 222 30% 25%;
-    --input: 222 30% 25%;
-    --ring: 24 100% 50%;
+    --border: 30 35% 22%;
+    --input: 30 35% 22%;
+    --ring: 24 100% 55%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
     
-    --dokkan-orange: 24 100% 50%;
-    --dokkan-gold: 45 100% 51%;
-    --dokkan-red: 0 100% 50%;
-    --dokkan-blue: 217 91% 60%;
-    --energy-glow: 45 100% 60%;
+    --dokkan-orange: 24 100% 55%;
+    --dokkan-gold: 45 100% 55%;
+    --dokkan-red: 0 100% 55%;
+    --dokkan-blue: 217 91% 65%;
+    --energy-glow: 45 100% 65%;
   }
 }
 
@@ -52,10 +52,13 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Exo 2', system-ui, sans-serif;
+    background: radial-gradient(ellipse at top, hsl(25 40% 12%), hsl(20 30% 8%));
+    min-height: 100vh;
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Orbitron', 'Exo 2', system-ui, sans-serif;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
 }
 
@@ -66,19 +69,30 @@
   
   .dokkan-gradient {
     background: linear-gradient(135deg, hsl(var(--dokkan-orange)) 0%, hsl(var(--dokkan-gold)) 100%);
+    box-shadow: 0 4px 20px hsl(var(--dokkan-orange) / 0.4);
   }
   
   .energy-glow {
-    box-shadow: 0 0 20px hsl(var(--energy-glow) / 0.5),
-                0 0 40px hsl(var(--energy-glow) / 0.3);
+    box-shadow: 0 0 25px hsl(var(--energy-glow) / 0.6),
+                0 0 50px hsl(var(--energy-glow) / 0.4),
+                inset 0 0 20px hsl(var(--energy-glow) / 0.2);
   }
   
   .card-glow-ssr {
-    box-shadow: 0 0 15px hsl(var(--dokkan-gold) / 0.6);
+    box-shadow: 0 0 20px hsl(var(--dokkan-gold) / 0.7),
+                0 0 40px hsl(var(--dokkan-gold) / 0.4);
+    border: 2px solid hsl(var(--dokkan-gold) / 0.5);
   }
   
   .card-glow-lr {
-    box-shadow: 0 0 20px hsl(var(--dokkan-blue) / 0.8);
+    box-shadow: 0 0 25px hsl(var(--dokkan-blue) / 0.9),
+                0 0 50px hsl(var(--dokkan-blue) / 0.5);
+    border: 2px solid hsl(var(--dokkan-blue) / 0.6);
+  }
+  
+  .card-glow-sr {
+    box-shadow: 0 0 15px hsl(var(--muted) / 0.5);
+    border: 1px solid hsl(var(--border));
   }
 }
 
