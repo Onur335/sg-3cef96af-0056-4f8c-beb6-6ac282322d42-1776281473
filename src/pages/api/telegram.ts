@@ -63,47 +63,52 @@ async function sendTelegramMessage(chatId: number, text: string): Promise<void> 
 
 async function getBerlinHbfDepartures(): Promise<string> {
   try {
-    const now = new Date();
-    const twoHoursLater = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    
     const url = `${DB_API_BASE}/stops/8011160/departures?duration=120&results=100`;
     
     const response = await fetch(url);
     
     if (!response.ok) {
+      console.error("DB API HTTP error:", response.status);
       throw new Error(`DB API error: ${response.status}`);
     }
     
     const data = await response.json();
+    
+    if (!data.departures || !Array.isArray(data.departures)) {
+      console.error("Invalid DB API response structure:", data);
+      throw new Error("Invalid API response");
+    }
+    
     const departures = data.departures as DBDeparture[];
     
     const trainDepartures = departures.filter((dep: DBDeparture) => {
-      const lineName = dep.line?.name || "";
-      const product = dep.line?.product?.toLowerCase() || "";
+      if (!dep.line || !dep.line.name) {
+        return false;
+      }
       
-      // NUR Fernverkehr (ICE, IC, EC) und Regionalverkehr (RE, RB, IRE)
-      const isFernverkehr = lineName.startsWith("ICE") || 
-                           lineName.startsWith("IC ") || 
-                           lineName.startsWith("EC ");
+      const lineName = dep.line.name.trim();
       
-      const isRegional = lineName.startsWith("RE") || 
-                        lineName.startsWith("RB") || 
-                        lineName.startsWith("IRE");
+      // Fernverkehr: ICE, IC, EC
+      const isFernverkehr = 
+        lineName.startsWith("ICE") || 
+        lineName.startsWith("IC ") || 
+        lineName.startsWith("EC ");
       
-      // Explizit ausschließen: S-Bahn, Straßenbahn, U-Bahn
-      const isSBahn = lineName.match(/^S\d+/);
-      const isTram = product.includes("tram") || lineName.startsWith("STR") || lineName.startsWith("M");
-      const isUBahn = lineName.match(/^U\d+/);
+      // Regionalverkehr: RE, RB, IRE
+      const isRegional = 
+        lineName.startsWith("RE") || 
+        lineName.startsWith("RB") || 
+        lineName.startsWith("IRE");
       
-      return (isFernverkehr || isRegional) && !isSBahn && !isTram && !isUBahn;
+      return isFernverkehr || isRegional;
     });
     
     if (trainDepartures.length === 0) {
-      return "Keine Züge in den nächsten 2 Stunden gefunden.";
+      return "Keine Fern- oder Regionalzüge in den nächsten 2 Stunden gefunden.";
     }
     
     let message = "<b>🚂 Berlin Hauptbahnhof - Nächste 2 Stunden</b>\n";
-    message += "<i>Nur Fern- und Regionalverkehr</i>\n\n";
+    message += "<i>Nur Fernverkehr (ICE/IC/EC) und Regionalverkehr (RE/RB/IRE)</i>\n\n";
     
     trainDepartures.slice(0, 20).forEach((dep: DBDeparture) => {
       const plannedTime = new Date(dep.plannedWhen);
@@ -134,6 +139,9 @@ async function getBerlinHbfDepartures(): Promise<string> {
     
   } catch (error) {
     console.error("Error fetching DB data:", error);
+    if (error instanceof Error) {
+      console.error("Error details:", error.message, error.stack);
+    }
     return "❌ Fehler beim Abrufen der Zugdaten. Bitte später erneut versuchen.";
   }
 }
