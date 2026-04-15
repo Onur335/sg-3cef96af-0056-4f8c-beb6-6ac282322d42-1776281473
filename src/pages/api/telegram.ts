@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getPhilharmonieEvents } from "@/lib/philharmonie-api";
 
 interface TelegramMessage {
   message_id: number;
@@ -41,6 +40,21 @@ interface DBDeparture {
   };
 }
 
+interface BundesligaMatch {
+  matchID: number;
+  matchDateTime: string;
+  team1: {
+    teamName: string;
+  };
+  team2: {
+    teamName: string;
+  };
+  location: {
+    locationCity: string;
+    locationStadium: string;
+  };
+}
+
 interface CachedData {
   message: string;
   timestamp: number;
@@ -48,10 +62,10 @@ interface CachedData {
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DB_API_BASE = "https://v6.db.transport.rest";
-const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 Minuten Cache
+const CACHE_DURATION_MS = 5 * 60 * 1000;
 
-// In-Memory Cache (wird zwischen Requests geteilt)
 let cachedDepartures: CachedData | null = null;
+let cachedFootball: CachedData | null = null;
 
 async function sendTelegramMessage(chatId: number, text: string): Promise<void> {
   if (!TELEGRAM_BOT_TOKEN) {
@@ -180,6 +194,108 @@ async function getBerlinHbfDepartures(): Promise<string> {
   }
 }
 
+async function getBundesligaMatches(): Promise<string> {
+  const now = Date.now();
+  if (cachedFootball && (now - cachedFootball.timestamp) < CACHE_DURATION_MS) {
+    console.log("Returning cached football data");
+    return cachedFootball.message + "\n\n<i>ℹ️ Daten werden alle 5 Minuten aktualisiert</i>";
+  }
+
+  try {
+    const currentSeason = 2024;
+    const url = `https://api.openligadb.de/getmatchdata/bl1/${currentSeason}`;
+    
+    console.log("Fetching Bundesliga data...");
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      console.error("Bundesliga API error:", response.status);
+      if (cachedFootball) {
+        return cachedFootball.message + "\n\n<i>⚠️ API-Limit erreicht - zeige letzte Daten</i>";
+      }
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    const matches = await response.json() as BundesligaMatch[];
+    
+    const berlinTeams = ["Union Berlin", "Hertha BSC"];
+    const now = new Date();
+    const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    
+    const relevantMatches = matches.filter((match: BundesligaMatch) => {
+      const matchDate = new Date(match.matchDateTime);
+      const hasBerlinTeam = 
+        berlinTeams.includes(match.team1.teamName) || 
+        berlinTeams.includes(match.team2.teamName);
+      const isUpcoming = matchDate >= now && matchDate <= nextWeek;
+      return hasBerlinTeam && isUpcoming;
+    });
+    
+    if (relevantMatches.length === 0) {
+      const message = "⚽ <b>Fußball Berlin</b>\n\nKeine Spiele in den nächsten 7 Tagen.";
+      cachedFootball = { message, timestamp: now };
+      return message;
+    }
+    
+    let message = "⚽ <b>Fußball Berlin - Nächste 7 Tage</b>\n\n";
+    
+    relevantMatches.forEach((match: BundesligaMatch) => {
+      const matchDate = new Date(match.matchDateTime);
+      const dateStr = matchDate.toLocaleDateString("de-DE", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+      });
+      const timeStr = matchDate.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      
+      const endTime = new Date(matchDate.getTime() + 2 * 60 * 60 * 1000);
+      const endTimeStr = endTime.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      
+      let stadium = "";
+      let address = "";
+      
+      if (match.team1.teamName === "Union Berlin") {
+        stadium = "Stadion An der Alten Försterei";
+        address = "An der Wuhlheide 263, 12555 Berlin (Köpenick)";
+      } else if (match.team1.teamName === "Hertha BSC") {
+        stadium = "Olympiastadion";
+        address = "Olympischer Platz 3, 14053 Berlin (Charlottenburg)";
+      } else {
+        stadium = match.location.locationStadium;
+        address = match.location.locationCity;
+      }
+      
+      message += `<b>${dateStr} | ${timeStr} - ${endTimeStr}</b>\n`;
+      message += `${match.team1.teamName} vs ${match.team2.teamName}\n`;
+      message += `📍 ${stadium}\n`;
+      message += `${address}\n\n`;
+    });
+    
+    cachedFootball = { message, timestamp: now };
+    console.log("Football cache updated");
+    
+    return message;
+    
+  } catch (error) {
+    console.error("Error fetching Bundesliga data:", error);
+    
+    if (cachedFootball) {
+      return cachedFootball.message + "\n\n<i>⚠️ Aktuelle Daten nicht verfügbar - zeige letzte Daten</i>";
+    }
+    
+    if (error instanceof Error) {
+      console.error("Error details:", error.message);
+    }
+    return "❌ Fehler beim Abrufen der Fußballdaten. Bitte später erneut versuchen.";
+  }
+}
+
 async function handleCommand(command: string, chatId: number): Promise<void> {
   switch (command.toLowerCase()) {
     case "/start":
@@ -188,8 +304,8 @@ async function handleCommand(command: string, chatId: number): Promise<void> {
         "👋 Hallo Onur!\n\n" +
         "<b>Bahnhöfe:</b>\n" +
         "/hbf — Berlin Hauptbahnhof\n\n" +
-        "<b>Veranstaltungen:</b>\n" +
-        "/philharmonie — Berliner Philharmonie"
+        "<b>Sport:</b>\n" +
+        "/fussball — Union Berlin & Hertha BSC"
       );
       break;
       
@@ -198,9 +314,10 @@ async function handleCommand(command: string, chatId: number): Promise<void> {
       await sendTelegramMessage(chatId, departures);
       break;
       
-    case "/philharmonie":
-      const events = await getPhilharmonieEvents();
-      await sendTelegramMessage(chatId, events);
+    case "/fussball":
+    case "/fußball":
+      const matches = await getBundesligaMatches();
+      await sendTelegramMessage(chatId, matches);
       break;
       
     default:
