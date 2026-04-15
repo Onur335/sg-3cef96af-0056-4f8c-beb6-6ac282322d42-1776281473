@@ -1,6 +1,6 @@
 ---
 title: Telegram Bot Integration mit Deutsche Bahn API
-status: in_progress
+status: done
 priority: high
 type: feature
 tags: [telegram, api, db]
