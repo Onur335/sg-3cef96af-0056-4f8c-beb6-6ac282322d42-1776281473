@@ -78,17 +78,32 @@ async function getBerlinHbfDepartures(): Promise<string> {
     const departures = data.departures as DBDeparture[];
     
     const trainDepartures = departures.filter((dep: DBDeparture) => {
+      const lineName = dep.line?.name || "";
       const product = dep.line?.product?.toLowerCase() || "";
-      return product.includes("national") || 
-             product.includes("regional") || 
-             dep.line?.mode === "train";
+      
+      // NUR Fernverkehr (ICE, IC, EC) und Regionalverkehr (RE, RB, IRE)
+      const isFernverkehr = lineName.startsWith("ICE") || 
+                           lineName.startsWith("IC ") || 
+                           lineName.startsWith("EC ");
+      
+      const isRegional = lineName.startsWith("RE") || 
+                        lineName.startsWith("RB") || 
+                        lineName.startsWith("IRE");
+      
+      // Explizit ausschließen: S-Bahn, Straßenbahn, U-Bahn
+      const isSBahn = lineName.match(/^S\d+/);
+      const isTram = product.includes("tram") || lineName.startsWith("STR") || lineName.startsWith("M");
+      const isUBahn = lineName.match(/^U\d+/);
+      
+      return (isFernverkehr || isRegional) && !isSBahn && !isTram && !isUBahn;
     });
     
     if (trainDepartures.length === 0) {
       return "Keine Züge in den nächsten 2 Stunden gefunden.";
     }
     
-    let message = "<b>🚂 Berlin Hauptbahnhof - Nächste 2 Stunden</b>\n\n";
+    let message = "<b>🚂 Berlin Hauptbahnhof - Nächste 2 Stunden</b>\n";
+    message += "<i>Nur Fern- und Regionalverkehr</i>\n\n";
     
     trainDepartures.slice(0, 20).forEach((dep: DBDeparture) => {
       const plannedTime = new Date(dep.plannedWhen);
